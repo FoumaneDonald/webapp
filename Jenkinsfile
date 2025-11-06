@@ -17,15 +17,15 @@ pipeline {
                 // For a Node.js project, you might run: sh 'npm install'
                 echo 'Building the application...'
                 
-                script {
+                // script {
 
-                    echo "Building Docker image: ${imageName}"
+                //     echo "Building Docker image: ${imageName}"
 
-                    // The 'sh' step runs a shell command. This command builds the Docker image.
-                    // The '.' refers to the current directory (the root of your cloned repo),
-                    // where your Dockerfile should be.
-                    // sh "docker build -t webapp:v1 ."
-                }
+                //     // The 'sh' step runs a shell command. This command builds the Docker image.
+                //     // The '.' refers to the current directory (the root of your cloned repo),
+                //     // where your Dockerfile should be.
+                //     // sh "docker build -t webapp:v1 ."
+                // }
             }
         }
         stage('Deploy') {
