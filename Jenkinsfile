@@ -25,6 +25,12 @@ pipeline {
         stage('Deploy - Run docker container') {
             steps {
                 script {
+                    slackSend(channel: '#jenkins_notification', color: 'good', message: "Cleaning up old container...")
+                    
+                    sh "docker stop ${IMAGE_NAME} || true"
+                    
+                    sh "docker rm ${IMAGE_NAME} || true"
+
                     slackSend(channel: '#jenkins_notification', color: 'good', message: "Running Docker container from image: ${IMAGE_NAME}")
 
                     // This command will run the container.
@@ -43,14 +49,7 @@ pipeline {
         // It's a good practice to clean up containers to avoid leaving old ones running.
         always {
             script {
-                slackSend(channel: '#jenkins_notification', color: 'good', message: "Cleaning up old container...")
-                // This command stops and removes the container. The '|| true' part
-                // ensures the pipeline doesn't fail if the container doesn't exist.
-                sh "docker stop ${IMAGE_NAME} || true"
-                
-                slackSend(channel: '#jenkins_notification', color: 'good', message: "Deploying the application...")
-                
-                sh "docker rm ${IMAGE_NAME} || true"
+                slackSend(channel: '#jenkins_notification', color: 'good', message: "Post-build steps complete.")
             }
         }
         success {
