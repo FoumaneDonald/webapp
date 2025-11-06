@@ -5,21 +5,15 @@ pipeline {
             steps {
                 // Jenkins automatically clones the code when the pipeline starts
                 // from the configured repository and branch.
-                // This stage is implicitly handled but good to visualize.
-                echo 'Cloning the repository...'
+                slackSend(channel: '#jenkins_notification', color: 'good', message: "Cloning repository...")
                 git branch: 'dev', url: 'https://github.com/FoumaneDonald/webapp.git'
             }
         }
         stage('Build') {
             steps {
-                // The commands here depend on your project.
-                // For a Java project, you might run: sh 'mvn clean install'
-                // For a Node.js project, you might run: sh 'npm install'
-                echo 'Building the application...'
-                
                 script {
 
-                    echo "Building Docker image: ${IMAGE_NAME}"
+                    slackSend(channel: '#jenkins_notification', color: 'good', message: "Building the application...")
 
                     // The 'sh' step runs a shell command. This command builds the Docker image.
                     // The '.' refers to the current directory (the root of your cloned repo),
@@ -31,7 +25,7 @@ pipeline {
         stage('Deploy - Run docker container') {
             steps {
                 script {
-                    echo "Running Docker container from image: ${IMAGE_NAME}"
+                    slackSend(channel: '#jenkins_notification', color: 'good', message: "Running Docker container from image: ${IMAGE_NAME}")
 
                     // This command will run the container.
                     // -d runs the container in detached mode (in the background).
@@ -49,17 +43,17 @@ pipeline {
         // It's a good practice to clean up containers to avoid leaving old ones running.
         always {
             script {
-                echo "Cleaning up old container..."
+                slackSend(channel: '#jenkins_notification', color: 'good', message: "Cleaning up old container...")
                 // This command stops and removes the container. The '|| true' part
                 // ensures the pipeline doesn't fail if the container doesn't exist.
                 sh "docker stop ${IMAGE_NAME} || true"
-
-                echo 'Deploying the application...'
+                
+                slackSend(channel: '#jenkins_notification', color: 'good', message: "Deploying the application...")
                 
                 sh "docker rm ${IMAGE_NAME} || true"
             }
         }
-         success {
+        success {
            slackSend(channel: '#jenkins_notification', color: 'good', message: "Deployment Successful: ${IMAGE_NAME} - Build ${IMAGE_NAME}")
         }
         failure {
