@@ -59,5 +59,11 @@ pipeline {
                 bat "docker rm ${CONTAINER_NAME} || true"
             }
         }
+         success {
+           slackSend(channel: '#jenkins_pipeline', color: 'good', message: "Deployment Successful: ${IMAGE_NAME} - Build ${CONTAINER_NAME}")
+        }
+        failure {
+            slackSend(channel: '#jenkins_pipeline', color: 'danger', message: "Deployment Failed: ${IMAGE_NAME} - Build ${CONTAINER_NAME}")
+        }
     }
 }
