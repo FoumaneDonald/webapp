@@ -38,7 +38,7 @@ pipeline {
                     // -p 1212:80 maps port 1212 on your host to port 80 in the container.
                     //    (Adjust the ports according to your application's needs).
                     // --name gives the container a unique name to avoid conflicts.
-                    bat "docker run -d -p 1212:80 --name ${CONTAINER_NAME} ${IMAGE_NAME}:${IMAGE_TAG}"
+                    bat "docker run -d -p 1212:80 --name ${IMAGE_NAME} ${IMAGE_NAME}:${IMAGE_TAG}"
                 }
             }
         }
@@ -52,18 +52,18 @@ pipeline {
                 echo "Cleaning up old container..."
                 // This command stops and removes the container. The '|| true' part
                 // ensures the pipeline doesn't fail if the container doesn't exist.
-                bat "docker stop ${CONTAINER_NAME} || true"
+                bat "docker stop ${IMAGE_NAME} || true"
 
                 echo 'Deploying the application...'
                 
-                bat "docker rm ${CONTAINER_NAME} || true"
+                bat "docker rm ${IMAGE_NAME} || true"
             }
         }
          success {
-           slackSend(channel: '#jenkins_notification', color: 'good', message: "Deployment Successful: ${IMAGE_NAME} - Build ${CONTAINER_NAME}")
+           slackSend(channel: '#jenkins_notification', color: 'good', message: "Deployment Successful: ${IMAGE_NAME} - Build ${IMAGE_NAME}")
         }
         failure {
-            slackSend(channel: '#jenkins_notification', color: 'danger', message: "Deployment Failed: ${IMAGE_NAME} - Build ${CONTAINER_NAME}")
+            slackSend(channel: '#jenkins_notification', color: 'danger', message: "Deployment Failed: ${IMAGE_NAME} - Build ${IMAGE_NAME}")
         }
     }
 }
