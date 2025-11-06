@@ -24,7 +24,7 @@ pipeline {
                     // The 'sh' step runs a shell command. This command builds the Docker image.
                     // The '.' refers to the current directory (the root of your cloned repo),
                     // where your Dockerfile should be.
-                    sh "docker build -t ${IMAGE_NAME}:${IMAGE_TAG} ."
+                    bat "docker build -t ${IMAGE_NAME}:${IMAGE_TAG} ."
                 }
             }
         }
@@ -38,7 +38,7 @@ pipeline {
                     // -p 8080:80 maps port 8080 on your host to port 80 in the container.
                     //    (Adjust the ports according to your application's needs).
                     // --name gives the container a unique name to avoid conflicts.
-                    sh "docker run -d -p 80:80 --name ${CONTAINER_NAME} ${IMAGE_NAME}:${IMAGE_TAG}"
+                    bat "docker run -d -p 80:80 --name ${CONTAINER_NAME} ${IMAGE_NAME}:${IMAGE_TAG}"
                 }
             }
         }
@@ -52,11 +52,11 @@ pipeline {
                 echo "Cleaning up old container..."
                 // This command stops and removes the container. The '|| true' part
                 // ensures the pipeline doesn't fail if the container doesn't exist.
-                sh "docker stop ${CONTAINER_NAME} || true"
+                bat "docker stop ${CONTAINER_NAME} || true"
 
                 echo 'Deploying the application...'
                 
-                sh "docker rm ${CONTAINER_NAME} || true"
+                bat "docker rm ${CONTAINER_NAME} || true"
             }
         }
     }
