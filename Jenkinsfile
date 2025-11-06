@@ -35,10 +35,10 @@ pipeline {
 
                     // This command will run the container.
                     // -d runs the container in detached mode (in the background).
-                    // -p 8080:80 maps port 8080 on your host to port 80 in the container.
+                    // -p 1212:80 maps port 1212 on your host to port 80 in the container.
                     //    (Adjust the ports according to your application's needs).
                     // --name gives the container a unique name to avoid conflicts.
-                    bat "docker run -d -p 80:80 --name ${CONTAINER_NAME} ${IMAGE_NAME}:${IMAGE_TAG}"
+                    bat "docker run -d -p 1212:80 --name ${CONTAINER_NAME} ${IMAGE_NAME}:${IMAGE_TAG}"
                 }
             }
         }
